@@ -17,7 +17,6 @@ def get_races(tracks=None):
     return data
 
 races = get_races()
-print(races[0])
 cols = db.get_cols('races')
 
 layout = html.Div(children=[

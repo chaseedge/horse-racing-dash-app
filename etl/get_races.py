@@ -74,9 +74,6 @@ def parse_tvg_race_schedule(data):
         races.append(r)
     logger.info(f"{len(races)} races parsed")
     return races
-
-
-
     
 
 @flow(retries=3, retry_delay_seconds=60)
@@ -89,11 +86,11 @@ def update_scheduled_races():
 
 if __name__ == "__main__":
     
-    update_scheduled_races()
-    # Deployment.build_from_flow(
-    #     update_scheduled_races,
-    #     schedule=(CronSchedule(cron="0 0 * * *", timezone="America/New_York"))
-    # )
+    # update_scheduled_races()
+    Deployment.build_from_flow(
+        update_scheduled_races,
+        schedule=(CronSchedule(cron="0 0 * * *", timezone="America/New_York"))
+    )
     
 
 
