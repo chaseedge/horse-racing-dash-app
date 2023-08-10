@@ -2,6 +2,8 @@ import sys
 import requests
 from prefect import flow
 from prefect import flow, get_run_logger, task
+from prefect.deployments.deployments import Deployment
+from prefect.server.schemas.schedules import CronSchedule
 
 try:
     from utils.database import Database
@@ -86,4 +88,14 @@ def update_scheduled_races():
    
 
 if __name__ == "__main__":
+    
     update_scheduled_races()
+    # Deployment.build_from_flow(
+    #     update_scheduled_races,
+    #     schedule=(CronSchedule(cron="0 0 * * *", timezone="America/New_York"))
+    # )
+    
+
+
+
+
