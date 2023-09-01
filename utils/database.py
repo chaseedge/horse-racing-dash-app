@@ -59,9 +59,10 @@ class Database:
     
     def get_cols(self, table):
         params = {}
+
         q = """SELECT column_name
-               FROM information_schema.columns 
-               WHERE table_name = {table} """
+                FROM information_schema.columns 
+                WHERE table_name = {table} """
         if "." in table:
             q += " AND table_schema = {schema};"
             schema, table = table.split(".")
@@ -71,10 +72,12 @@ class Database:
             params['table'] = table
             
         with psycopg.connect(**self.params) as conn:
+            q = sql.SQL(q).format(**params)
             with conn.cursor() as cur:
-                q = sql.SQL(q).format(**params)
                 cur.execute(q)
-                return [x[0] for x in cur.fetchall()]
+                data = cur.fetchall()
+                data = [x[0] for x in data]
+                return data
                     
     def get_primary_keys(self, table):
         params = {}
@@ -237,7 +240,7 @@ class Database:
         df = self._prep_df(df=df[cols], table=table)
         ex_cols = [x for x in cols if x not in pkeys]
 
-        params = {'table': sql.Identifier(table),
+        params = {'table': sql.Identifier(*table.split(".")),
                   "pkeys": sql.SQL(", ").join(map(sql.Identifier, pkeys)),
                   "all_cols": sql.SQL(', ').join(map(sql.Identifier, cols)),
                   "vals": sql.SQL(', ').join(sql.Placeholder() * len(cols)),
@@ -263,7 +266,7 @@ class Database:
         values = [[d.get(c, None) for c in cols] for d in data]
         ex_cols = [x for x in cols if x not in pkeys]
 
-        params = {'table': sql.Identifier(table),
+        params = {'table': sql.Identifier(*table.split(".")),
                   "pkeys": sql.SQL(", ").join(map(sql.Identifier, pkeys)),
                   "all_cols": sql.SQL(', ').join(map(sql.Identifier, cols)),
                   "vals": sql.SQL(', ').join(sql.Placeholder() * len(cols)),
@@ -291,7 +294,7 @@ class Database:
         df = self._prep_df(df=df[cols], table=table)
         ex_cols = [x for x in cols if x not in pkeys]
 
-        params = {'table': sql.Identifier(table),
+        params = {'table': sql.Identifier(*table.split(".")),
                   "pkeys": sql.SQL(", ").join(map(sql.Identifier, pkeys)),
                   "all_cols": sql.SQL(', ').join(map(sql.Identifier, cols)),
                   "vals": sql.SQL(', ').join(sql.Placeholder() * len(cols)),
@@ -324,7 +327,7 @@ class Database:
         df = self._prep_df(df=df[cols], table=table)
         ex_cols = [x for x in cols if x not in pkeys]
 
-        params = {'table': sql.Identifier(table),
+        params = {'table': sql.Identifier(*table.split(".")),
                   "pkeys": sql.SQL(", ").join(map(sql.Identifier, pkeys)),
                   "all_cols": sql.SQL(', ').join(map(sql.Identifier, cols)),
                   "vals": sql.SQL(', ').join(sql.Placeholder() * len(cols)),

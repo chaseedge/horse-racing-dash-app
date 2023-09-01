@@ -81,16 +81,16 @@ def update_scheduled_races():
     races = get_tvg_race_schedule()
     races = parse_tvg_race_schedule(races)
     db = Database()
-    db.upsert(races, table="races", pkeys=['race_id'])
+    db.upsert(races, table="tvg.races", pkeys=['race_id'])
    
 
 if __name__ == "__main__":
     
-    # update_scheduled_races()
-    Deployment.build_from_flow(
-        update_scheduled_races,
-        schedule=(CronSchedule(cron="0 0 * * *", timezone="America/New_York"))
-    )
+    update_scheduled_races()
+    # Deployment.build_from_flow(
+    #     update_scheduled_races,
+    #     schedule=(CronSchedule(cron="0 0 * * *", timezone="America/New_York"))
+    # )
     
 
 
