@@ -28,7 +28,7 @@ class Database:
             host=os.getenv("DB_URL"),
             autocommit=True,
         )
-        self._execute_check_pattern = re.compile("(?:^update)|(?:(?:(?:create)|(?:drop)|(?:alter)"\
+        self._execute_check_pattern = re.compile("(?:^update)|(?:^refresh)|(?:(?:(?:create)|(?:drop)|(?:alter)"\
                                                  "|(?:truncate))\s+table)|(?:insert\s+into)|(?:delete from)", flags=re.I)
     
     def query(self, query, params=None, as_df=True):
