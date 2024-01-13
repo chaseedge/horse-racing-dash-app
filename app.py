@@ -51,22 +51,22 @@ def my_cron_job():
      
     
 if __name__ == '__main__':    
-    if not app.server.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
-        scheduler = BackgroundScheduler() 
-        
-        # https://apscheduler.readthedocs.io/en/3.x/modules/triggers/cron.html
-        # Schedule the cron job to run every minute a the 15 seconds
-        scheduler.add_job(func=my_cron_job, 
-                            trigger=CronTrigger(second="0,15,30,45"),
-                            max_instances=1)
-        
-        # Schedule the cron job to run at 9, 12 , 15, 18 at eastern timezon
-        # scheduler.add_job(func=my_cron_job, 
-        #                     trigger=CronTrigger(hour="9,12,15,18", timezone=pytz.timezone("EST")),
-        #                     max_instances=1)
-        
-        # Start the scheduler
-        scheduler.start() 
+    
+    scheduler = BackgroundScheduler() 
+    
+    # https://apscheduler.readthedocs.io/en/3.x/modules/triggers/cron.html
+    # Schedule the cron job to run every minute a the 15 seconds
+    scheduler.add_job(func=my_cron_job, 
+                        trigger=CronTrigger(second="0,15,30,45"),
+                        max_instances=1)
+    
+    # Schedule the cron job to run at 9, 12 , 15, 18 at eastern timezon
+    # scheduler.add_job(func=my_cron_job, 
+    #                     trigger=CronTrigger(hour="9,12,15,18", timezone=pytz.timezone("EST")),
+    #                     max_instances=1)
+    
+    # Start the scheduler
+    scheduler.start() 
         
     app.run(debug=True)
     
